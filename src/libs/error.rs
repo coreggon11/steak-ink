@@ -13,7 +13,14 @@ pub enum SteakErr {
     PSP22Error(PSP22Error),
     AmountMustBeAboveZero,
     NothingToWithdraw,
+
     NotEnoughVotingPower,
+    MaxFourOptions,
+    AtLeastOneDay,
+    NoVotingPower,
+    ProposalDoesNotExist,
+    ProposalExpired,
+    IncorrectOption,
 }
 
 impl From<SteakErr> for PSP22Error {

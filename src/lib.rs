@@ -2,8 +2,8 @@
 #![feature(min_specialization)]
 
 pub mod impls;
-pub mod libs;
-pub mod traits;
+mod libs;
+mod traits;
 
 pub use impls::*;
 pub use libs::*;

@@ -3,25 +3,26 @@
 
 #[openbrush::contract]
 mod steakoin {
-    use openbrush::contracts::psp22::*;
     use openbrush::traits::Storage;
+    use steak_ink::impls::voting::{
+        Data as VotingData,
+        *,
+    };
 
     #[ink(storage)]
     #[derive(Default, Storage)]
-    pub struct Steakoin {
+    pub struct VotingContract {
         #[storage_field]
-        psp22: psp22::Data,
+        voting: VotingData,
     }
 
-    impl PSP22 for Steakoin {}
+    impl Voting for VotingContract {}
 
-    impl Steakoin {
+    impl VotingContract {
         #[ink(constructor)]
-        pub fn new() -> Self {
+        pub fn new(steakoin_account: AccountId) -> Self {
             let mut instance = Self::default();
-            instance
-                ._mint_to(instance.env().caller(), 1_000_000 * 10u128.pow(18))
-                .expect("Should mint");
+            instance.voting.steakoin = steakoin_account;
             instance
         }
     }
