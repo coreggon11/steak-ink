@@ -3,32 +3,19 @@
 
 #[openbrush::contract]
 mod steakoin {
-    use openbrush::{
-        contracts::psp22::{
-            Data as PSP22Data,
-            *,
-        },
-        traits::Storage,
-    };
-    use steak_ink::impls::steakoin::{
-        Data as SteakoinData,
-        *,
-    };
+    use openbrush::contracts::psp22::*;
+    use openbrush::traits::Storage;
 
     #[ink(storage)]
     #[derive(Default, Storage)]
-    pub struct SteakoinContract {
+    pub struct Steakoin {
         #[storage_field]
-        psp22: PSP22Data,
-        #[storage_field]
-        staking: SteakoinData,
+        psp22: psp22::Data,
     }
 
-    impl PSP22 for SteakoinContract {}
+    impl PSP22 for Steakoin {}
 
-    impl Steakoin for SteakoinContract {}
-
-    impl SteakoinContract {
+    impl Steakoin {
         #[ink(constructor)]
         pub fn new() -> Self {
             let mut instance = Self::default();
