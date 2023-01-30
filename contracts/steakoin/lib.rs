@@ -17,10 +17,10 @@ mod steakoin {
 
     impl Steakoin {
         #[ink(constructor)]
-        pub fn new(initial_supply: Balance) -> Self {
+        pub fn new() -> Self {
             let mut instance = Self::default();
             instance
-                ._mint_to(instance.env().caller(), initial_supply)
+                ._mint_to(instance.env().caller(), 1_000_000 * 10u128.pow(18))
                 .expect("Should mint");
             instance
         }
