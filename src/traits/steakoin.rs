@@ -18,4 +18,7 @@ pub trait Steakoin {
 
     #[ink(message)]
     fn unsteak(&mut self, amount: Balance) -> Result<(), SteakErr>;
+
+    #[ink(message)]
+    fn voting_power(&self, account: AccountId) -> u128;
 }

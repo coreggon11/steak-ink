@@ -32,7 +32,7 @@ where
 
         if let Some(staking_data) = staked {
             // accumulate
-            self._accummulate(&caller, &staking_data)?;
+            self._accummulate(&staking_data)?;
         } else {
             // new stake
             let _ = &self
@@ -56,7 +56,7 @@ where
 
         if let Some(staking_data) = staked {
             // accumulate
-            let new_amount = self._accummulate(&caller, &staking_data)?;
+            let new_amount = self._accummulate(&staking_data)?;
             if amount >= new_amount {
                 // withdraw max
                 self.data().staked.remove(&caller);
@@ -74,10 +74,22 @@ where
 
         Ok(())
     }
+
+    fn voting_power(&self, account: AccountId) -> u128 {
+        let staked = &self.data::<Data>().staked.get(&account);
+
+        if let Some(staking_data) = staked {
+            return self._get_accumulated_amount(&staking_data)
+        } else {
+            0
+        }
+    }
 }
 
 pub trait Internal {
-    fn _accummulate(&mut self, user: &AccountId, staking_data: &(Balance, Timestamp)) -> Result<Balance, SteakErr>;
+    fn _accummulate(&mut self, staking_data: &(Balance, Timestamp)) -> Result<Balance, SteakErr>;
+
+    fn _get_accumulated_amount(&self, staking_data: &(Balance, Timestamp)) -> Balance;
 }
 
 impl<T> Internal for T
@@ -85,7 +97,23 @@ where
     T: Storage<Data>,
     T: psp22::Internal,
 {
-    fn _accummulate(&mut self, user: &AccountId, staking_data: &(Balance, Timestamp)) -> Result<Balance, SteakErr> {
+    fn _accummulate(&mut self, staking_data: &(Balance, Timestamp)) -> Result<Balance, SteakErr> {
+        let last_amount = staking_data.0;
+        let reward = self._get_accumulated_amount(staking_data);
+        if reward > 0 {
+            // if reward is too small we don't update
+            self.data().staked.insert(
+                &Self::env().caller(),
+                &(last_amount + reward, Self::env().block_timestamp()),
+            );
+            // we will mint to the contract
+            self._mint_to(Self::env().account_id(), reward)?;
+        }
+
+        Ok(last_amount + reward)
+    }
+
+    fn _get_accumulated_amount(&self, staking_data: &(Balance, Timestamp)) -> Balance {
         let last_amount = staking_data.0;
         let staked_time = staking_data.1;
 
@@ -95,15 +123,6 @@ where
         // 11% APR
         let one_year = 365 * 24 * 60 * 60 * 1000;
         let per_year = ((last_amount * 111) - (last_amount * 100)) / 100;
-        let reward = per_year * delta as u128 / one_year;
-
-        if reward > 0 {
-            // if reward is too small we don't update
-            self.data().staked.insert(&user, &(last_amount + reward, current_time));
-            // we will mint to the contract
-            self._mint_to(Self::env().account_id(), reward)?;
-        }
-
-        Ok(last_amount + reward)
+        return per_year * delta as u128 / one_year
     }
 }
