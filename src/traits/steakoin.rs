@@ -1,9 +1,12 @@
-pub use ink_prelude::vec::Vec;
-use openbrush::contracts::psp22::extensions::{
-    burnable::*,
-    mintable::*,
+pub use crate::libs::error::SteakErr;
+pub use ink::prelude::vec::Vec;
+pub use openbrush::{
+    contracts::psp22::*,
+    traits::{
+        AccountId,
+        Balance,
+    },
 };
-pub use openbrush::traits::AccountId;
 
 #[openbrush::wrapper]
 pub type SteakoinRef = dyn Steakoin + PSP22;
@@ -14,5 +17,5 @@ pub trait Steakoin {
     fn steak(&mut self, amount: Balance) -> Result<(), SteakErr>;
 
     #[ink(message)]
-    fn unsteak(&mut self) -> Result<(), SteakErr>;
+    fn unsteak(&mut self, amount: Balance) -> Result<(), SteakErr>;
 }

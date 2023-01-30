@@ -1,17 +1,25 @@
-use openbrush::contracts::psp22::PSP22Error;
-use scale::{Decode, Encode};
+use openbrush::{
+    contracts::psp22::PSP22Error,
+    traits::String,
+};
+use scale::{
+    Decode,
+    Encode,
+};
 
 #[derive(Debug, Encode, Decode, PartialEq, Eq)]
 #[cfg_attr(feature = "std", derive(scale_info::TypeInfo))]
 pub enum SteakErr {
     PSP22Error(PSP22Error),
+    AmountMustBeAboveZero,
+    NothingToWithdraw
 }
 
 impl From<SteakErr> for PSP22Error {
     fn from(err: SteakErr) -> Self {
         match err {
             SteakErr::PSP22Error(err) => err,
-            _ => PSP22Error::Custom(err.encode()),
+            _ => PSP22Error::Custom(String::from("Custom")),
         }
     }
 }

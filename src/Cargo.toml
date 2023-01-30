@@ -23,3 +23,5 @@ std = [
     "scale-info/std",
     "openbrush/std",
 ]
+
+steakoin = []
