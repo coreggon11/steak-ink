@@ -2,7 +2,7 @@
 #![feature(min_specialization)]
 
 #[openbrush::contract]
-mod steakoin {
+mod voting {
     use openbrush::traits::Storage;
     use steak_ink::impls::voting::{
         Data as VotingData,
