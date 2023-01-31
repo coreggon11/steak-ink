@@ -7,17 +7,22 @@ mod steakoin {
         contracts::psp22::*,
         traits::Storage,
     };
+    use steak_ink::impls::steakoin::*;
 
     #[ink(storage)]
     #[derive(Default, Storage)]
-    pub struct Steakoin {
+    pub struct SteakoinContract {
         #[storage_field]
         psp22: psp22::Data,
+        #[storage_field]
+        steakoin: steak_ink::Data,
     }
 
-    impl PSP22 for Steakoin {}
+    impl PSP22 for SteakoinContract {}
 
-    impl Steakoin {
+    impl Steakoin for SteakoinContract {}
+
+    impl SteakoinContract {
         #[ink(constructor)]
         pub fn new() -> Self {
             Self::default()

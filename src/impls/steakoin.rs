@@ -1,5 +1,6 @@
 use crate::error::SteakErr;
 pub use crate::traits::steakoin::*;
+use ink::prelude::vec::*;
 use openbrush::{
     contracts::psp22,
     storage::Mapping,
