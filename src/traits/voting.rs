@@ -20,5 +20,5 @@ pub trait Voting {
     fn vote(&mut self, proposal_id: Id, option: u8) -> Result<(), SteakErr>;
 
     #[ink(message)]
-    fn get_votes(&self, proposal_id: Id) -> Vec<Balance>;
+    fn get_votes(&self, proposal_id: Id) -> Vec<(String, Balance)>;
 }
