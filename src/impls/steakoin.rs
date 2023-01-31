@@ -46,6 +46,7 @@ where
                 .insert(&caller, &(amount, Self::env().block_timestamp()));
         }
 
+        self.emit_steaked(amount, Self::env().block_timestamp());
         self.transfer_from(caller, Self::env().account_id(), amount, Vec::default())?;
 
         Ok(())
@@ -133,5 +134,5 @@ where
         return per_year * delta as u128 / one_year
     }
 
-    fn emit_steaked(&mut self, _: Balance, _: Timestamp) {}
+    default fn emit_steaked(&mut self, _: Balance, _: Timestamp) {}
 }
