@@ -1,8 +1,14 @@
-use openbrush::traits::{
-    AccountId,
-    Balance,
-};
 use crate::libs::error::SteakErr;
+use openbrush::{
+    contracts::psp22::*,
+    traits::{
+        AccountId,
+        Balance,
+    },
+};
+
+#[openbrush::wrapper]
+pub type SteakoinRef = dyn Steakoin + PSP22;
 
 #[openbrush::trait_definition]
 pub trait Steakoin {
