@@ -1,16 +1,25 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![feature(min_specialization)]
 
-#[ink::contract]
+#[openbrush::contract]
 mod steakoin {
+    use openbrush::{
+        contracts::psp22::*,
+        traits::Storage,
+    };
 
     #[ink(storage)]
-    #[derive(Default)]
-    pub struct Steakoin {}
+    #[derive(Default, Storage)]
+    pub struct Steakoin {
+        #[storage_field]
+        psp22: psp22::Data,
+    }
+
+    impl PSP22 for Steakoin {}
 
     impl Steakoin {
-        /// Constructor that initializes the `bool` value to the given `init_value`.
         #[ink(constructor)]
-        pub fn new(init_value: bool) -> Self {
+        pub fn new() -> Self {
             Self::default()
         }
     }
