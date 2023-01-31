@@ -10,7 +10,17 @@ use scale::{
 #[derive(Debug, PartialEq, Eq, Encode, Decode)]
 #[cfg_attr(feature = "std", derive(scale_info::TypeInfo))]
 pub enum SteakErr {
-    PSP22Error(PSP22Error)
+    PSP22Error(PSP22Error),
+    AmountMustBeAboveZero,
+    NothingToWithdraw,
+
+    NotEnoughVotingPower,
+    MaxFourOptions,
+    AtLeastOneDay,
+    NoVotingPower,
+    ProposalDoesNotExist,
+    ProposalExpired,
+    IncorrectOption,
 }
 
 impl From<SteakErr> for PSP22Error {

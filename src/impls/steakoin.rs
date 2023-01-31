@@ -132,5 +132,5 @@ where
         return per_year * delta as u128 / one_year
     }
 
-    fn emit_steaked(&mut self, amount: Balance, timestamp: Timestamp) {}
+    fn emit_steaked(&mut self, _: Balance, _: Timestamp) {}
 }
